@@ -1,3 +1,22 @@
+# Noted Notes App
+
+## Screenshot
+
+![](./src/assets/images/screenshot.png)
+
+## Web version
+
+- Visit [here](https://notednotes.web.app)
+
+### Built with
+
+- HTML
+- Tailwind CSS
+- Next JS
+- Firebase
+
+
+
 This is a [Next.js](https://nextjs.org/) project bootstrapped with [`create-next-app`](https://github.com/vercel/next.js/tree/canary/packages/create-next-app).
 
 ## Getting Started
