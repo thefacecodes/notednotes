@@ -2,7 +2,7 @@
 
 ## Screenshot
 
-![](./src/assets/images/screenshot.png)
+![](./assets/images/screenshot.png)
 
 ## Web version
 
