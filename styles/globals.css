@@ -128,12 +128,20 @@ nav ul button {
 }
 
 .notes .preview {
-    @apply border-2 p-4 rounded-2xl
+    @apply border-2 p-4 rounded-2xl text-ellipsis
 }
 
 .notes .preview h3 {
     text-overflow: ellipsis;
     overflow: hidden;
     white-space: nowrap;
-    @apply text-[24px] font-semibold font-clash
+    @apply text-[24px] font-semibold font-clash leading-none
+}
+
+.notes .preview p {
+    @apply my-2
+}
+
+.modal {
+    @apply bg-black text-white p-4 text-base fixed top-2 right-0 left-0
 }

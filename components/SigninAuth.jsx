@@ -1,14 +1,18 @@
-import React from 'react'
-import { FcGoogle } from "react-icons/fc"
-import { BsGithub } from "react-icons/bs"
-import { signInWithPopup, GoogleAuthProvider, GithubAuthProvider } from "firebase/auth";
-import { auth } from './firebase';
+import React, { useContext } from "react";
+import { FcGoogle } from "react-icons/fc";
+import { BsGithub } from "react-icons/bs";
+import {
+  signInWithPopup,
+  GoogleAuthProvider,
+  GithubAuthProvider,
+} from "firebase/auth";
+import { auth } from "./firebase";
+import { NotesContext } from "./AppContext";
 
 function SigninAuth() {
-
-
+  const { state, dispatch } = useContext(NotesContext);
   const gitSignin = () => {
-    const provider = new GithubAuthProvider()
+    const provider = new GithubAuthProvider();
     signInWithPopup(auth, provider)
       .then((result) => {
         // This gives you a GitHub Access Token. You can use it to access the GitHub API.
@@ -17,13 +21,21 @@ function SigninAuth() {
 
         // The signed-in user info.
         const user = result.user;
+        dispatch({ type: "USER_ACTIVE", payload: user });
+        dispatch({
+          type: "openModal",
+          payload: `Authenticated as ${user.login}`,
+        });
         console.log(user);
+
         // ...
       })
       .catch((error) => {
         // Handle Errors here.
         const errorCode = error.code;
         const errorMessage = error.message;
+        const myError = errorMessage.replace("Firebase", "Note.d");
+        dispatch({ type: "openModal", payload: myError });
         console.log(errorMessage);
         // The email of the user's account used.
         // const email = error.customData.email;
@@ -33,24 +45,30 @@ function SigninAuth() {
       });
   };
 
-
-  const googleSignin = () => {
-    const provider = new GoogleAuthProvider()
-    signInWithPopup(auth, provider)
+  const googleSignin = async () => {
+    const provider = new GoogleAuthProvider();
+    await signInWithPopup(auth, provider)
       .then((result) => {
         // This gives you a Google Access Token. You can use it to access the Google API.
         const credential = GoogleAuthProvider.credentialFromResult(result);
         const token = credential.accessToken;
         // The signed-in user info.
         const user = result.user;
+        dispatch({ type: "USER_ACTIVE", payload: user });
+        dispatch({
+          type: "openModal",
+          payload: `Authenticated as ${user.email}`,
+        });
         console.log(user);
         // ...
       })
       .catch((error) => {
         // Handle Errors here.
         const errorCode = error.code;
-        
+
         const errorMessage = error.message;
+        const myError = errorMessage.replace("Firebase", "Note.d");
+        dispatch({ type: "openModal", payload: myError });
         console.log(errorMessage);
         // The email of the user's account used.
         // const email = error.customData.email;
@@ -61,21 +79,32 @@ function SigninAuth() {
   };
 
   return (
-    <div className='w-full'>
-        <div className="flex w-full items-center">
-            <hr className='w-full border' />
-            <h3 className='p-2 border'>OR</h3>
-            <hr className='w-full border' />
-        </div>
-        <div onClick={googleSignin} className="w-full px-2 h-[40px] border-2 my-4 flex items-center rounded">
-           <FcGoogle className='text-[24px]'/> <button type='button' onClick={googleSignin} className='w-full h-full'>Sign in with Google</button>
-        </div>
-        <div onClick={gitSignin} className="w-full px-2 h-[40px] border-2  flex items-center rounded">
-            <BsGithub className='text-[24px]'/><button type='button' onClick={gitSignin} className='w-full h-full'>Sign in with GitHub</button>
-        </div>
-
+    <div className="w-full">
+      <div className="flex w-full items-center">
+        <hr className="w-full border" />
+        <h3 className="p-2 border">OR</h3>
+        <hr className="w-full border" />
+      </div>
+      <div
+        onClick={googleSignin}
+        className="w-full px-2 h-[40px] border-2 my-4 flex items-center rounded"
+      >
+        <FcGoogle className="text-[24px]" />{" "}
+        <button type="button" onClick={googleSignin} className="w-full h-full">
+          Sign in with Google
+        </button>
+      </div>
+      <div
+        onClick={gitSignin}
+        className="w-full px-2 h-[40px] border-2  flex items-center rounded"
+      >
+        <BsGithub className="text-[24px]" />
+        <button type="button" onClick={gitSignin} className="w-full h-full">
+          Sign in with GitHub
+        </button>
+      </div>
     </div>
-  )
+  );
 }
 
-export default SigninAuth
+export default SigninAuth;
